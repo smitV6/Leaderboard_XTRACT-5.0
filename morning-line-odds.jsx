@@ -1,3 +1,4 @@
+import React from "react";
 import './morning-line-odds.css';
 
 export default function MorningLineOdds() {
