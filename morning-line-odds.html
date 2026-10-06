@@ -1,0 +1,528 @@
+<title>Morning Line Odds Jumbotron</title>
+<style>
+  :root {
+    --bg-dark: #1a1a1a;
+    --bg-light: #2a2a2a;
+    --concrete-light: #3a3a3a;
+    --concrete-mid: #2d2d2d;
+    --concrete-dark: #1f1f1f;
+    --screen-black: #0a0a0a;
+    --text-white: #ffffff;
+    --rule-white: #e8e8e8;
+    --gold-accent: #d4af37;
+    --gold-light: #e8d084;
+    --magenta: #ff1493;
+    --red-costume: #dc143c;
+    --white-costume: #f5f5f5;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    font-family: Arial, sans-serif;
+  }
+
+  .scene {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    min-height: 600px;
+    background: linear-gradient(180deg, #2a3a45 0%, #3d4d5c 40%, #4a5a6a 100%);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.4);
+  }
+
+  .pillar {
+    position: absolute;
+    background: linear-gradient(90deg, #2a2a2a 0%, #3d3d3d 50%, #2a2a2a 100%);
+    box-shadow: inset 2px 0 10px rgba(0, 0, 0, 0.8);
+  }
+
+  .pillar.left {
+    left: 0;
+    top: 0;
+    width: 8%;
+    height: 100%;
+    z-index: 1;
+  }
+
+  .pillar.right {
+    right: 0;
+    top: 0;
+    width: 5%;
+    height: 100%;
+    z-index: 1;
+  }
+
+  .content-wrapper {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 40px 20px;
+  }
+
+  .jumbotron {
+    background: var(--screen-black);
+    border: 20px solid #000;
+    box-shadow:
+      0 20px 60px rgba(0, 0, 0, 0.8),
+      inset 0 0 20px rgba(255, 255, 255, 0.1),
+      inset 0 0 30px rgba(0, 0, 0, 0.9);
+    padding: 30px;
+    max-width: 900px;
+    width: 100%;
+    margin-top: 40px;
+  }
+
+  .title {
+    font-family: "Bebas Neue", "Oswald", sans-serif;
+    font-size: clamp(28px, 6vw, 48px);
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-white);
+    text-align: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid var(--rule-white);
+  }
+
+  .tables-row {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  .divider {
+    width: 4px;
+    min-height: 400px;
+    background: repeating-linear-gradient(
+      90deg,
+      var(--rule-white) 0px,
+      var(--rule-white) 1px,
+      transparent 1px,
+      transparent 2px
+    );
+    margin: 0 10px;
+  }
+
+  .odds-table {
+    flex: 1;
+    min-width: 200px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid var(--rule-white);
+  }
+
+  thead {
+    background: var(--screen-black);
+  }
+
+  th {
+    color: var(--text-white);
+    padding: 12px;
+    text-align: center;
+    border: 1px solid var(--rule-white);
+    font-weight: bold;
+    font-size: clamp(12px, 2vw, 14px);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-bottom: 2px solid var(--rule-white);
+  }
+
+  th:first-child {
+    width: 65%;
+  }
+
+  th:last-child {
+    width: 35%;
+  }
+
+  td {
+    color: var(--text-white);
+    padding: 10px 12px;
+    text-align: center;
+    border: 1px solid var(--rule-white);
+    font-size: clamp(11px, 1.8vw, 13px);
+    height: 35px;
+    vertical-align: middle;
+  }
+
+  td:first-child {
+    text-align: left;
+    padding-left: 15px;
+  }
+
+  .row-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--gold-accent);
+    color: #000;
+    font-weight: bold;
+    font-size: 12px;
+    margin-right: 8px;
+  }
+
+  .row-number.plain {
+    background: none;
+    color: var(--text-white);
+    border: none;
+  }
+
+  .crowd {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 15px;
+    padding: 0 40px 0 40px;
+    z-index: 3;
+    filter: brightness(0.6);
+  }
+
+  .person {
+    width: 30px;
+    height: 80px;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .head {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--white-costume);
+  }
+
+  .body {
+    position: absolute;
+    top: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 24px;
+    height: 50px;
+    border-radius: 4px;
+  }
+
+  .person:nth-child(1) .head {
+    background: #d4a574;
+  }
+
+  .person:nth-child(1) .body {
+    background: var(--gold-light);
+  }
+
+  .person:nth-child(2) .head {
+    background: #e91e63;
+    width: 20px;
+    height: 20px;
+  }
+
+  .person:nth-child(2) .head::after {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -3px;
+    width: 26px;
+    height: 12px;
+    background: #ffb6c1;
+    border-radius: 50%;
+  }
+
+  .person:nth-child(2) .body {
+    background: #ff1493;
+  }
+
+  .person:nth-child(3) .head {
+    background: #a9a9a9;
+  }
+
+  .person:nth-child(3) .body {
+    background: var(--red-costume);
+  }
+
+  .person:nth-child(4) .head {
+    background: var(--white-costume);
+  }
+
+  .person:nth-child(4) .body {
+    background: #f0e68c;
+  }
+
+  .person:nth-child(5) .head {
+    background: var(--white-costume);
+  }
+
+  .person:nth-child(5) .body {
+    background: var(--white-costume);
+  }
+
+  .person:nth-child(6) .head {
+    background: #8b4513;
+  }
+
+  .person:nth-child(6) .head::after {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 16px;
+    height: 14px;
+    background: var(--gold-light);
+    clip-path: polygon(0 40%, 100% 30%, 100% 60%, 0 50%);
+  }
+
+  .person:nth-child(6) .body {
+    background: var(--gold-light);
+  }
+
+  @media (max-width: 768px) {
+    .pillar.left {
+      width: 6%;
+    }
+
+    .pillar.right {
+      width: 4%;
+    }
+
+    .jumbotron {
+      margin-top: 20px;
+      padding: 20px;
+      border-width: 15px;
+    }
+
+    .tables-row {
+      gap: 15px;
+    }
+
+    .divider {
+      min-height: 350px;
+    }
+
+    .crowd {
+      height: 120px;
+      gap: 10px;
+      padding: 0 30px;
+    }
+
+    .person {
+      width: 25px;
+      height: 70px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .pillar.left,
+    .pillar.right {
+      display: none;
+    }
+
+    .jumbotron {
+      margin-top: 30px;
+      padding: 15px;
+    }
+
+    .tables-row {
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .divider {
+      width: 100%;
+      height: 4px;
+      min-height: auto;
+      margin: 10px 0;
+    }
+
+    .crowd {
+      height: 100px;
+      gap: 8px;
+      padding: 0 20px;
+    }
+
+    .person {
+      width: 22px;
+      height: 60px;
+    }
+  }
+</style>
+
+<div class="scene">
+  <div class="pillar left"></div>
+  <div class="pillar right"></div>
+
+  <div class="content-wrapper">
+    <div class="jumbotron">
+      <div class="title">Morning Line Odds</div>
+
+      <div class="tables-row">
+        <div class="odds-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Teams</th>
+                <th>Score</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="row-number">1</span>Team ABC</td>
+                <td>300</td>
+              </tr>
+              <tr>
+                <td><span class="row-number">2</span>Team ABC</td>
+                <td>300</td>
+              </tr>
+              <tr>
+                <td><span class="row-number">3</span>Team ABC</td>
+                <td>300</td>
+              </tr>
+              <tr>
+                <td><span class="row-number plain">4.</span>Team ABC</td>
+                <td>300</td>
+              </tr>
+              <tr>
+                <td><span class="row-number plain">5.</span>Team ABC</td>
+                <td>300</td>
+              </tr>
+              <tr>
+                <td><span class="row-number plain">6.</span>Team ABC</td>
+                <td>300</td>
+              </tr>
+              <tr>
+                <td><span class="row-number plain">7.</span>Team ABC</td>
+                <td>300</td>
+              </tr>
+              <tr>
+                <td><span class="row-number plain">8.</span>Team ABC</td>
+                <td>300</td>
+              </tr>
+              <tr>
+                <td><span class="row-number plain">9.</span>Team ABC</td>
+                <td>300</td>
+              </tr>
+              <tr>
+                <td><span class="row-number plain">10.</span>Team ABC</td>
+                <td>300</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="odds-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Teams</th>
+                <th>Score</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="row-number">1</span>Team ABC</td>
+                <td>300</td>
+              </tr>
+              <tr>
+                <td><span class="row-number">2</span>Team ABC</td>
+                <td>300</td>
+              </tr>
+              <tr>
+                <td><span class="row-number">3</span>Team ABC</td>
+                <td>300</td>
+              </tr>
+              <tr>
+                <td><span class="row-number plain">4.</span>Team ABC</td>
+                <td>300</td>
+              </tr>
+              <tr>
+                <td><span class="row-number plain">5.</span>Team ABC</td>
+                <td>300</td>
+              </tr>
+              <tr>
+                <td><span class="row-number plain">6.</span>Team ABC</td>
+                <td>300</td>
+              </tr>
+              <tr>
+                <td><span class="row-number plain">7.</span>Team ABC</td>
+                <td>300</td>
+              </tr>
+              <tr>
+                <td><span class="row-number plain">8.</span>Team ABC</td>
+                <td>300</td>
+              </tr>
+              <tr>
+                <td><span class="row-number plain">9.</span>Team ABC</td>
+                <td>300</td>
+              </tr>
+              <tr>
+                <td><span class="row-number plain">10.</span>Team ABC</td>
+                <td>300</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="crowd">
+    <div class="person">
+      <div class="head"></div>
+      <div class="body"></div>
+    </div>
+    <div class="person">
+      <div class="head"></div>
+      <div class="body"></div>
+    </div>
+    <div class="person">
+      <div class="head"></div>
+      <div class="body"></div>
+    </div>
+    <div class="person">
+      <div class="head"></div>
+      <div class="body"></div>
+    </div>
+    <div class="person">
+      <div class="head"></div>
+      <div class="body"></div>
+    </div>
+    <div class="person">
+      <div class="head"></div>
+      <div class="body"></div>
+    </div>
+  </div>
+</div>
