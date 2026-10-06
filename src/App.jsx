@@ -24,7 +24,7 @@ const boardData = {
     { rank: 17, name: "TEAM 17", score: "NA" },
     { rank: 18, name: "TEAM 18", score: "NA" },
     { rank: 19, name: "TEAM 19", score: "NA" },
-    { rank: 20, name: "TEAM 20", score: "NA" },
+    { rank: 20, name: "TEAM Smit", score: "NA" },
   ],
 };
 const App = () => {
